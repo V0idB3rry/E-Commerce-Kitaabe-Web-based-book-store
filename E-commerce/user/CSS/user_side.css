@@ -1,0 +1,36 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.user-form{
+    width: 100%;
+    margin-top: 70px;
+}
+.user-form form{
+    height: 500px;
+    width: 400px;
+    margin: auto;
+    padding: 20px;
+    /* background-color: rgb(255, 255, 255); */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    border: 1px solid black;
+    border-radius: 8px;
+}
+.user-form form label{
+    font-weight: 500;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(51, 51, 51);
+}
+.user-form form input{
+    width: 350px;
+    height: 40px;
+    font-size: 14px;
+    text-indent: 10px;
+    
+}
+.user-form form input[type="submit"]{
+    background-color: orange;
+    border: 1px solid black;
+    border-radius: 5px;
+}

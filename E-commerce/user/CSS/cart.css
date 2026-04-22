@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Geist:wght@100..900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html{
+    scroll-behavior: smooth;
+}
+
+body{
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.container{
+    background-color: aqua;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(236, 236, 236);
+     gap: 50px;
+}
+.cart--container{
+    background-color: rgb(255, 255, 255);
+    width: 50%;
+    height: 650px;
+    border-radius: 10px;
+    padding: 5px;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+.product{
+    display: flex;
+    padding: 15px 15px 15px 35px;
+    /* flex-direction: column; */
+    height: 250px;
+    width: 100%;
+    margin-top: 10px;
+    gap: 20px;
+}
+.heading{
+    font-family: comfortaa;
+    text-align: center;
+    margin-top: 15px;
+    border-bottom: 1px solid rgb(227, 180, 23);
+    font-weight: 600;
+}
+.img{
+    width: 20%;
+}
+.img img{
+    width: 120px;
+    height: auto;
+    border-radius: 8px;
+}
+.product--details{
+    margin-left: 80px;
+    margin-right: 80px;
+    height: 100%;
+    display: flex;
+    /* justify-content: center; */
+    flex-direction: column;
+    align-items: left;
+    gap: 15px;
+}
+.product--details p{
+    font-family: geist;
+    font-size: 20px;
+    color: rgb(255, 94, 0);
+    font-weight: 600;
+}
+.more{
+    display: flex;
+    /* background-color: aquamarine; */
+    align-items: center;
+}
+.more button{
+    background-color: goldenrod;
+    padding: 5px;
+    border-radius: 4px;
+}
+.more input[type = "text"]{
+    background-color: rgb(217, 217, 217);
+    border-radius: 4px;
+    border: 1px solid black;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+button {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    text-align: center;
+    line-height: 1;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+input[type="text"] {
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #ddd;
+    margin: 0 5px;
+}
+#shop--btn{
+    background-color: #FFD814;
+    width: 150px;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.total--container{
+    width: 30%;
+    background-color: rgb(255, 255, 255);
+    height: 650px;
+}
+
+/*
+Mobile responsive for less the 760px resolution .. 
+*/
+
+@media(max-width: 768px){
+    .container{
+        display: flex;
+        flex-direction: column;
+        transform-box: ease;
+    }
+    .container .cart--container{
+        width: 80%;
+        margin-top: 25px;
+    }
+    .cart--container .product{
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 0;
+    }
+    .img{
+        width: 100%;
+        text-align: center;
+    }
+    .product--details{
+        width: 100%;
+        margin: 0;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+    }
+
+    .container .total--container{
+        width: 80%;
+    }
+    .more{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+    .more button{
+        margin: 0;
+    }
+}
