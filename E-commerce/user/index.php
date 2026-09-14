@@ -620,7 +620,7 @@ $results = mysqli_query($conn, $sql);
     <div class="container">
         
         <div class="upper--img">
-            <img src="../user/product-Source/banner.png" alt="Second Self Banner - Premium Products">
+            <img src="../user/product-Source/banner.jpg" alt="Second Shelf: Old books, new beginnings">
         </div>
         
         <div class="main">
