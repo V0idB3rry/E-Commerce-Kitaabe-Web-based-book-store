@@ -1,0 +1,15 @@
+# Secrets (copy the *.example.php files and fill in real values)
+E-commerce/user/secrets.php
+
+# Generated design canvas (rebuild with design/mockups/build-artboards.mjs)
+E-commerce/design/mockups/*.html
+
+# Dependencies and builds
+node_modules/
+dist/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

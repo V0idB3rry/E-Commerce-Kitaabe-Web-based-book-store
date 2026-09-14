@@ -1,0 +1,88 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "title": "Home · Desktop",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 3000
+    },
+    {
+      "file": "HomeMobile.dc.html",
+      "title": "Home · Mobile",
+      "x": 1560,
+      "y": 0,
+      "w": 390,
+      "h": 2860
+    },
+    {
+      "file": "Catalog.dc.html",
+      "title": "Catalog",
+      "x": 2070,
+      "y": 0,
+      "w": 1440,
+      "h": 2100
+    },
+    {
+      "file": "BookDetail.dc.html",
+      "title": "Book detail",
+      "x": 3630,
+      "y": 0,
+      "w": 1440,
+      "h": 2520
+    },
+    {
+      "file": "Cart.dc.html",
+      "title": "Cart",
+      "x": 0,
+      "y": 3200,
+      "w": 1440,
+      "h": 1500
+    },
+    {
+      "file": "Checkout.dc.html",
+      "title": "Checkout",
+      "x": 1560,
+      "y": 3200,
+      "w": 1440,
+      "h": 1200
+    },
+    {
+      "file": "SignIn.dc.html",
+      "title": "Sign in",
+      "x": 3120,
+      "y": 3200,
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "file": "Admin.dc.html",
+      "title": "Admin · Dashboard",
+      "x": 4680,
+      "y": 3200,
+      "w": 1440,
+      "h": 1000
+    },
+    {
+      "file": "StyleGuide.dc.html",
+      "title": "Style guide",
+      "x": 0,
+      "y": 4860,
+      "w": 1440,
+      "h": 1600
+    }
+  ],
+  "annotations": [
+    {
+      "id": "brand-note",
+      "x": 0,
+      "y": -260,
+      "w": 520,
+      "text": "Second Shelf, brand v1\nBuilt on the existing banner: forest green #2F4538 + mustard #F4B942 on warm paper.\nAnton (hero) · Newsreader (headings, titles) · Figtree (UI)\nPrices, stock, orders and revenue are sample data."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}
