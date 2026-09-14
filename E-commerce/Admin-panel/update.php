@@ -73,7 +73,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     ";
     mysqli_query($conn, $sql_update_category);
 
-    header("Location: admin.php");
+    header("Location: Admin-Panal.php");
     exit();
 }
 $sql_category = "SELECT * FROM category";
@@ -97,9 +97,6 @@ $results_category = mysqli_query($conn, $sql_category);
     </style>
 </head>
 <body>
-<?php
-    include '../user/loader.php';
-    ?>
     <div class="form-container">
         <h2>Update Your Product</h2>
         <form id="myForm" action="update.php" method="post" enctype="multipart/form-data">

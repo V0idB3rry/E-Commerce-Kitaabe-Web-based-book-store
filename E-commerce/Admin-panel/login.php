@@ -117,7 +117,7 @@ if(isset($_POST["username"]) && $_POST["password"]) {
 </head>
 <body>
     <div class="form-container">
-        <a href="../user/index.php" style = " text-decoration : none; color: blue;">  Back to home page </a>
+        <a href="../frontend/dist/" style = " text-decoration : none; color: blue;">  Back to home page </a>
         <h2>Admin Login</h2>
         <form action="login.php" method="post">
             <input type="text" name="username" placeholder="Enter your username" required>

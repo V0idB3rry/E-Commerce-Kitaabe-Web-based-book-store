@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['product_name'])) {
     $filename      = $file['name'];
     $filetmpname   = $file['tmp_name'];
 
-    $target_directory = "../user/product-Source/";
+    $target_directory = "../uploads/books/";
     $target_file      = $target_directory . basename($filename);
     move_uploaded_file($filetmpname, $target_file);
 
@@ -273,7 +273,7 @@ if ($orders_exist) {
                         while ($product = mysqli_fetch_assoc($prod_list)):
                         ?>
                         <tr>
-                            <td><img class="prod-img" src="../user/product-Source/<?= htmlspecialchars($product['product_image']) ?>" alt=""></td>
+                            <td><img class="prod-img" src="../uploads/books/<?= htmlspecialchars($product['product_image']) ?>" alt=""></td>
                             <td><?= htmlspecialchars($product['product_name']) ?></td>
                             <td><?= htmlspecialchars($product['category']) ?></td>
                             <td>₹<?= number_format($product['product_price'], 2) ?></td>

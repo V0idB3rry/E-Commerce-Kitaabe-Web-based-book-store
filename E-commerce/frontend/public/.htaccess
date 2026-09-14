@@ -1,0 +1,6 @@
+# Serve index.html for app routes like /books/3 so page refreshes work under Apache
+RewriteEngine On
+RewriteBase /E-Commerce-Kitaabe-Web-based-book-store/E-commerce/frontend/dist/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.html [L]

@@ -26,4 +26,4 @@ Each migration runs **once**. `schema.sql` includes 13 sample books with placeho
 | `orders`, `order_items` | Placed orders with Razorpay / COD payment status |
 | `sell_requests` | "Sell your books" submissions |
 
-The old PHP pages still write cart rows without a `user_id`; the new API ignores those.
+Cart rows without a `user_id` came from the old storefront (now removed); the API ignores them.
