@@ -31,6 +31,7 @@ export default function Footer() {
         </div>
         <div className="footer-bottom">
           <div>© {new Date().getFullYear()} Second Shelf. A college project.</div>
+          <Link to="/admin" style={{ color: 'inherit' }}>Admin</Link>
         </div>
       </div>
     </footer>

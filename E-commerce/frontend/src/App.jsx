@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { RequireAuth, ScrollManager, StoreLayout } from './components/Layouts.jsx'
 import Account from './pages/Account.jsx'
@@ -12,6 +12,8 @@ import NotFound from './pages/NotFound.jsx'
 import OrderConfirmation from './pages/OrderConfirmation.jsx'
 import SellBooks from './pages/SellBooks.jsx'
 import SignIn from './pages/SignIn.jsx'
+
+const AdminApp = lazy(() => import('./admin/AdminApp.jsx'))
 
 const TITLES = {
   '/': 'Second Shelf · Old books, new beginnings',
@@ -54,6 +56,14 @@ export default function App() {
         <Route path="orders/:id" element={<RequireAuth><OrderConfirmation /></RequireAuth>} />
         <Route path="signin" element={<SignIn mode="signin" />} />
         <Route path="signup" element={<SignIn mode="signup" />} />
+        <Route
+          path="admin/*"
+          element={
+            <Suspense fallback={<div className="loading">Loading admin…</div>}>
+              <AdminApp />
+            </Suspense>
+          }
+        />
       </Routes>
     </>
   )

@@ -84,6 +84,20 @@ function require_user(): int
     return $id;
 }
 
+function current_admin_id(): ?int
+{
+    return isset($_SESSION['admin_id']) ? (int) $_SESSION['admin_id'] : null;
+}
+
+function require_admin(): int
+{
+    $id = current_admin_id();
+    if ($id === null) {
+        fail('Please sign in to the admin panel.', 401);
+    }
+    return $id;
+}
+
 /** Shape a product_details row for the frontend. */
 function format_book(array $row): array
 {
