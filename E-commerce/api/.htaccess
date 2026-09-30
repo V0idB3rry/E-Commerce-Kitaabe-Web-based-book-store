@@ -1,0 +1,4 @@
+# Only the endpoint files are public; helpers and keys are not.
+<FilesMatch "^(config|bootstrap|secrets|secrets\.example)\.php$">
+    Require all denied
+</FilesMatch>
