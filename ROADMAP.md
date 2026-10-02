@@ -29,9 +29,10 @@ Already done: central access guard in `E-commerce/api/bootstrap.php`. Endpoints 
 - [x] **Email verification**
   - Plan: send a link after sign-up. Decide whether unverified users can still place orders.
   - Decision: unverified customers can sign in and browse, but can't place orders. Accounts created before migration 003 count as verified.
-- [ ] **Real email delivery**
+- [x] **Real email delivery**
   - Problem: XAMPP's `mail()` isn't set up, so emails (and their links) only go to the PHP error log.
   - Plan: configure `mail()`/sendmail or an SMTP service before going live, then remove the log fallback.
+  - Done: a small SMTP client in `bootstrap.php`, set up with the `smtp_*` settings in `secrets.php` (Gmail App Password works). The log fallback stays only for when no SMTP server is set (local dev). Make sure `smtp_host` is set on a live server.
 
 ## P3: Quality
 

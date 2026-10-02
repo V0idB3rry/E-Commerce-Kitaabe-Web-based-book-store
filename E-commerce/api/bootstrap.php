@@ -146,6 +146,85 @@ function mark_paid(PDO $pdo, int $order_id, int $user_id, string $payment_id): v
     fulfil_order($pdo, $order_id, $user_id);
 }
 
+/**
+ * Send a plain-text email through the SMTP server set in secrets.php. With no SMTP server (local dev),
+ * the whole email, links included, goes to the PHP error log so you can still click through.
+ */
+function send_email(string $to, string $subject, string $text): void
+{
+    if (SMTP_HOST === '') {
+        error_log("[mail] SMTP isn't set up in api/secrets.php, so this email was only logged. To: $to | $subject\n$text");
+        return;
+    }
+    try {
+        smtp_send($to, $subject, $text);
+    } catch (RuntimeException $e) {
+        error_log("[mail] sending to $to failed: " . $e->getMessage());  // never log the body: it holds live links
+    }
+}
+
+/** Minimal SMTP client: smtp_encryption "ssl" (port 465), "tls" (STARTTLS, port 587) or "none" (local test servers). */
+function smtp_send(string $to, string $subject, string $text): void
+{
+    $remote = (SMTP_ENCRYPTION === 'ssl' ? 'ssl://' : 'tcp://') . SMTP_HOST . ':' . SMTP_PORT;
+    $smtp = @stream_socket_client($remote, $errno, $errstr, 10);
+    if (!$smtp) {
+        throw new RuntimeException("can't connect to $remote: $errstr");
+    }
+    stream_set_timeout($smtp, 10);
+
+    // Each command gets a reply; multi-line replies use "250-" on every line but the last
+    $send = function (?string $command, int $expected) use ($smtp): void {
+        if ($command !== null) {
+            fwrite($smtp, $command . "\r\n");
+        }
+        do {
+            $line = fgets($smtp, 515);
+        } while ($line !== false && ($line[3] ?? ' ') === '-');
+
+        if ($line === false || (int) $line !== $expected) {
+            throw new RuntimeException('server replied: ' . ($line === false ? 'nothing (timed out)' : trim($line)));
+        }
+    };
+
+    $host = parse_url(APP_URL, PHP_URL_HOST) ?: 'localhost';
+    $from = preg_match('/<([^>]+)>/', MAIL_FROM, $m) ? $m[1] : MAIL_FROM;
+
+    $send(null, 220);
+    $send("EHLO $host", 250);
+    if (SMTP_ENCRYPTION === 'tls') {
+        $send('STARTTLS', 220);
+        if (!stream_socket_enable_crypto($smtp, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+            throw new RuntimeException('STARTTLS handshake failed');
+        }
+        $send("EHLO $host", 250);
+    }
+    if (SMTP_USER !== '') {
+        $send('AUTH LOGIN', 334);
+        $send(base64_encode(SMTP_USER), 334);
+        $send(base64_encode(SMTP_PASS), 235);
+    }
+    $send("MAIL FROM:<$from>", 250);
+    $send("RCPT TO:<$to>", 250);
+    $send('DATA', 354);
+
+    $headers = [
+        'Date: ' . date('r'),
+        'From: ' . MAIL_FROM,
+        "To: <$to>",
+        'Subject: =?UTF-8?B?' . base64_encode($subject) . '?=',
+        'Message-ID: <' . bin2hex(random_bytes(16)) . "@$host>",
+        'MIME-Version: 1.0',
+        'Content-Type: text/plain; charset=utf-8',
+        'Content-Transfer-Encoding: base64',
+    ];
+    // A base64 body never has a line that is just ".", so it can't end the message early
+    $send(implode("\r\n", $headers) . "\r\n\r\n" . chunk_split(base64_encode($text)) . '.', 250);
+
+    fwrite($smtp, "QUIT\r\n");  // the email is already accepted; no need to wait for the goodbye
+    fclose($smtp);
+}
+
 /** Stop password guessing: 429 after 5 failures for one email, or 20 from one IP, in 15 minutes. */
 function check_login_attempts(string $scope, string $email): void
 {

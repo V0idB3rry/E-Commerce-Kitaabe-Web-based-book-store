@@ -19,5 +19,14 @@ return [
     // Where links in emails point. Dev server: http://localhost:5173
     // Built app: http://localhost/E-Commerce-Kitaabe-Web-based-book-store/E-commerce/frontend/dist
     'app_url'   => 'http://localhost:5173',
-    'mail_from' => 'Second Shelf <no-reply@example.com>',
+
+    // Outgoing email. Leave smtp_host out to only log emails (local dev).
+    // Gmail: turn on 2-Step Verification, create an App Password (myaccount.google.com/apppasswords),
+    // and send from that same Gmail address. Other providers list their SMTP settings in their docs.
+    'mail_from'       => 'Second Shelf <you@gmail.com>',
+    'smtp_host'       => 'smtp.gmail.com',
+    'smtp_port'       => 587,
+    'smtp_encryption' => 'tls',               // "tls" for 587, "ssl" for 465
+    'smtp_user'       => 'you@gmail.com',
+    'smtp_pass'       => 'xxxx xxxx xxxx xxxx', // the 16-character App Password, not your Gmail password
 ];

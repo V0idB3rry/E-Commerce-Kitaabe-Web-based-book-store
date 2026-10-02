@@ -49,6 +49,9 @@ Cart rows without a `user_id` came from the old storefront (now removed); the AP
 
 ## Emails (verification, password reset)
 
-The API sends them with PHP's `mail()`, which XAMPP doesn't set up by default. Until it is, each email
-(with its link) is written to the PHP error log instead: `C:\xampp\php\logs\php_error_log`, or the
-terminal if you use `php -S`. Set `app_url` in `api/secrets.php` so links open the right address.
+The API sends them over SMTP using the `smtp_*` settings in `api/secrets.php` (Gmail with an App
+Password works; see `secrets.example.php`). Set `app_url` there too, so links open the right address.
+
+Without `smtp_host`, nothing is sent: each email, link included, is written to the PHP error log
+instead (`C:\xampp\php\logs\php_error_log`, or the terminal if you use `php -S`). Sending failures
+are logged there too, without the email's text.

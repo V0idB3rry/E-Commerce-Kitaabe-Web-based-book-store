@@ -19,6 +19,13 @@ define('RAZORPAY_WEBHOOK_SECRET', $secrets['razorpay_webhook_secret'] ?? '');
 define('APP_URL',   rtrim($secrets['app_url'] ?? 'http://localhost:5173', '/'));
 define('MAIL_FROM', $secrets['mail_from'] ?? 'Second Shelf <no-reply@localhost>');
 
+// Outgoing email (SMTP). Without smtp_host, emails are only written to the PHP error log.
+define('SMTP_HOST',       $secrets['smtp_host']       ?? '');
+define('SMTP_PORT',       (int) ($secrets['smtp_port'] ?? 587));
+define('SMTP_ENCRYPTION', $secrets['smtp_encryption'] ?? 'tls');  // "tls" (587), "ssl" (465) or "none"
+define('SMTP_USER',       $secrets['smtp_user']       ?? '');
+define('SMTP_PASS',       $secrets['smtp_pass']       ?? '');
+
 const STORE_NAME         = 'Second Shelf';
 const CURRENCY            = 'INR';
 const DELIVERY_FEE        = 40;   // ₹40 on smaller orders

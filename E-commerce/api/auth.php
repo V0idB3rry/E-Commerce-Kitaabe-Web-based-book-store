@@ -50,15 +50,6 @@ function sign_in(array $row, bool $remember): never
     send_json(['user' => public_user($row)]);
 }
 
-/** Plain-text email. XAMPP's mail() isn't set up by default; then the message goes to the PHP error log. */
-function send_email(string $to, string $subject, string $text): void
-{
-    // ponytail: the log fallback holds live links; fine on localhost, set up mail() (or SMTP) before going live
-    if (!@mail($to, $subject, $text, ['From' => MAIL_FROM, 'Content-Type' => 'text/plain; charset=utf-8'])) {
-        error_log("[mail] not sent (mail() isn't set up). To: $to | $subject\n$text");
-    }
-}
-
 /** A one-time link: "verify" works for 48 hours, "reset" for 1 hour. Replaces earlier links of the same kind. */
 function email_link(int $user_id, string $purpose): string
 {
