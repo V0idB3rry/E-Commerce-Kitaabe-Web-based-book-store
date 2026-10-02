@@ -15,4 +15,9 @@ return [
 
     // Any long random string; enter the same one in Razorpay dashboard → Webhooks
     'razorpay_webhook_secret' => 'xxxxxxxxxxxxxxxxxxxxxxxx',
+
+    // Where links in emails point. Dev server: http://localhost:5173
+    // Built app: http://localhost/E-Commerce-Kitaabe-Web-based-book-store/E-commerce/frontend/dist
+    'app_url'   => 'http://localhost:5173',
+    'mail_from' => 'Second Shelf <no-reply@example.com>',
 ];

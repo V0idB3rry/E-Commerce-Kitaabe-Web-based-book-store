@@ -10,6 +10,7 @@ Run these in order (phpMyAdmin → Import, or the command line):
 C:\xampp\mysql\bin\mysql.exe -u root < database\schema.sql
 C:\xampp\mysql\bin\mysql.exe -u root < database\migrations\001_storefront_v2.sql
 C:\xampp\mysql\bin\mysql.exe -u root < database\migrations\002_login_attempts.sql
+C:\xampp\mysql\bin\mysql.exe -u root < database\migrations\003_email_links.sql
 C:\xampp\php\php.exe database\create_admin.php
 ```
 
@@ -41,5 +42,12 @@ Keep running migrations as `root`: `shelf_app` can't create or alter tables.
 | `orders`, `order_items` | Placed orders with Razorpay / COD payment status |
 | `sell_requests` | "Sell your books" submissions |
 | `login_attempts` | Failed sign-ins (last 24 h), used to block password guessing |
+| `email_tokens` | Email verification and password reset links (hashed). `user_database.email_verified_at` is set once confirmed |
 
 Cart rows without a `user_id` came from the old storefront (now removed); the API ignores them.
+
+## Emails (verification, password reset)
+
+The API sends them with PHP's `mail()`, which XAMPP doesn't set up by default. Until it is, each email
+(with its link) is written to the PHP error log instead: `C:\xampp\php\logs\php_error_log`, or the
+terminal if you use `php -S`. Set `app_url` in `api/secrets.php` so links open the right address.

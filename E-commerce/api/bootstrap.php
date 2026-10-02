@@ -11,7 +11,9 @@ set_exception_handler(function (Throwable $e) {
     send_json(['error' => 'Something went wrong on our side. Please try again.'], 500);
 });
 
-session_set_cookie_params(['httponly' => true, 'samesite' => 'Lax']);
+// ponytail: only sees HTTPS terminated by Apache itself; behind a proxy, also check X-Forwarded-Proto
+define('IS_HTTPS', !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+session_set_cookie_params(['httponly' => true, 'samesite' => 'Lax', 'secure' => IS_HTTPS]);
 session_start();
 
 function send_json(array $data, int $status = 200): never
@@ -173,6 +175,21 @@ function record_login_failure(string $scope, string $email): void
 function clear_login_failures(string $scope, string $email): void
 {
     db()->prepare('DELETE FROM login_attempts WHERE scope = ? AND email = ?')->execute([$scope, $email]);
+}
+
+// CSRF: a browser request that changes data must come from our own site (Origin host = our host; the
+// port may differ, for the Vite dev server) and carry JSON or a file upload, which a plain HTML form on
+// another site can't send as JSON. Requests with no Origin (Razorpay's webhook, curl) are let through.
+if (!in_array(method(), ['GET', 'HEAD', 'OPTIONS'], true)) {
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? null;
+    if ($origin !== null && parse_url($origin, PHP_URL_HOST) !== parse_url('http://' . ($_SERVER['HTTP_HOST'] ?? ''), PHP_URL_HOST)) {
+        fail('This request came from another website and was blocked.', 403);
+    }
+    $type = $_SERVER['CONTENT_TYPE'] ?? '';
+    if ($type !== '' && !preg_match('#^(application/json|multipart/form-data)\b#i', $type)) {
+        fail('Unsupported content type.', 415);
+    }
+    unset($origin, $type);
 }
 
 // Central access guard: runs for every endpoint. Endpoints not listed here are admin-only,

@@ -133,11 +133,14 @@ export default function SignIn({ mode }) {
           </div>
 
           {!isSignup && (
-            <label className="checkbox">
-              <input type="checkbox" name="remember" checked={form.remember} onChange={onChange} />
-              <span className="box"><Icon name="check" size={14} strokeWidth={2.6} /></span>
-              <span className="text">Keep me signed in</span>
-            </label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <label className="checkbox">
+                <input type="checkbox" name="remember" checked={form.remember} onChange={onChange} />
+                <span className="box"><Icon name="check" size={14} strokeWidth={2.6} /></span>
+                <span className="text">Keep me signed in</span>
+              </label>
+              <Link to="/reset-password" style={{ fontWeight: 700, fontSize: 14 }}>Forgot password?</Link>
+            </div>
           )}
 
           <button type="submit" className="btn btn-primary btn-lg" disabled={busy}>

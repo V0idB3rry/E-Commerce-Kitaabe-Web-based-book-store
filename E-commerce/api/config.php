@@ -15,7 +15,11 @@ define('RAZORPAY_KEY_ID',         $secrets['razorpay_key_id']         ?? '');
 define('RAZORPAY_KEY_SECRET',     $secrets['razorpay_key_secret']     ?? '');
 define('RAZORPAY_WEBHOOK_SECRET', $secrets['razorpay_webhook_secret'] ?? '');
 
-const STORE_NAME          = 'Second Shelf';
+// Links in emails (password reset, verification) point here: the React app's address, no trailing slash
+define('APP_URL',   rtrim($secrets['app_url'] ?? 'http://localhost:5173', '/'));
+define('MAIL_FROM', $secrets['mail_from'] ?? 'Second Shelf <no-reply@localhost>');
+
+const STORE_NAME         = 'Second Shelf';
 const CURRENCY            = 'INR';
 const DELIVERY_FEE        = 40;   // ₹40 on smaller orders
 const FREE_DELIVERY_ABOVE = 499;  // free delivery at or above ₹499

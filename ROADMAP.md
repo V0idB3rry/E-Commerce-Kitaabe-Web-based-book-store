@@ -18,15 +18,20 @@ Already done: central access guard in `E-commerce/api/bootstrap.php`. Endpoints 
 
 ## P2: Needed before going live
 
-- [ ] **CSRF protection**
+- [x] **CSRF protection**
   - Problem: the only protection is the SameSite=Lax cookie, and `body()` accepts any Content-Type.
   - Plan: reject write requests (POST/PATCH/DELETE) whose `Content-Type` isn't `application/json` or `multipart/form-data`, and check the `Origin` header in `bootstrap.php`.
-- [ ] **Mark the session cookie `secure` on HTTPS**
+- [x] **Mark the session cookie `secure` on HTTPS**
   - Plan: add `'secure' => !empty($_SERVER['HTTPS'])` to `session_set_cookie_params`.
-- [ ] **Password reset**
+  - Note: this only detects HTTPS handled by Apache itself. Behind a proxy, `X-Forwarded-Proto` also needs checking.
+- [x] **Password reset**
   - Plan: a "forgot password" form emails a one-time link (hashed token with an expiry, stored in a new table), and the link leads to a page that sets a new password.
-- [ ] **Email verification**
+- [x] **Email verification**
   - Plan: send a link after sign-up. Decide whether unverified users can still place orders.
+  - Decision: unverified customers can sign in and browse, but can't place orders. Accounts created before migration 003 count as verified.
+- [ ] **Real email delivery**
+  - Problem: XAMPP's `mail()` isn't set up, so emails (and their links) only go to the PHP error log.
+  - Plan: configure `mail()`/sendmail or an SMTP service before going live, then remove the log fallback.
 
 ## P3: Quality
 

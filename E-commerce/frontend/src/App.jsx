@@ -10,8 +10,10 @@ import Checkout from './pages/Checkout.jsx'
 import Home from './pages/Home.jsx'
 import NotFound from './pages/NotFound.jsx'
 import OrderConfirmation from './pages/OrderConfirmation.jsx'
+import PasswordReset from './pages/PasswordReset.jsx'
 import SellBooks from './pages/SellBooks.jsx'
 import SignIn from './pages/SignIn.jsx'
+import VerifyEmail from './pages/VerifyEmail.jsx'
 
 const AdminApp = lazy(() => import('./admin/AdminApp.jsx'))
 
@@ -25,6 +27,8 @@ const TITLES = {
   '/signup': 'Create account · Second Shelf',
   '/account': 'Your account · Second Shelf',
   '/sell': 'Sell your books · Second Shelf',
+  '/reset-password': 'Reset password · Second Shelf',
+  '/verify-email': 'Confirm email · Second Shelf',
 }
 
 function DocumentTitle() {
@@ -49,6 +53,8 @@ export default function App() {
           <Route path="books/:id" element={<BookDetail />} />
           <Route path="cart" element={<Cart />} />
           <Route path="sell" element={<SellBooks />} />
+          <Route path="reset-password" element={<PasswordReset />} />
+          <Route path="verify-email" element={<VerifyEmail />} />
           <Route path="account" element={<RequireAuth><Account /></RequireAuth>} />
           <Route path="*" element={<NotFound />} />
         </Route>

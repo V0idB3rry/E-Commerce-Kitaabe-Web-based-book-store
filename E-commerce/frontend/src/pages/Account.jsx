@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { rupees } from '../api.js'
+import { api, rupees } from '../api.js'
 import Icon from '../components/Icons.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useApi } from '../useApi.js'
@@ -7,6 +8,29 @@ import { OrderItems, PAYMENT_LABELS } from './OrderConfirmation.jsx'
 
 function formatDate(value) {
   return new Date(value.replace(' ', 'T')).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+function VerifyNotice() {
+  const [message, setMessage] = useState(null)
+  const [busy, setBusy] = useState(false)
+
+  async function resend() {
+    setBusy(true)
+    try {
+      await api('auth.php', { method: 'POST', body: { action: 'resend_verification' } })
+      setMessage('Sent. Check your inbox for the new link.')
+    } catch (err) {
+      setMessage(err.message)
+    }
+    setBusy(false)
+  }
+
+  return (
+    <div className="alert alert-info" role="status" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+      <span>{message ?? 'Please confirm your email address. You’ll need to before placing an order.'}</span>
+      <button type="button" className="btn btn-ghost btn-sm" onClick={resend} disabled={busy}>Resend email</button>
+    </div>
+  )
 }
 
 export default function Account() {
@@ -29,6 +53,8 @@ export default function Account() {
           </div>
           <button type="button" className="btn btn-ghost" onClick={signOut}><Icon name="logout" size={18} />Sign out</button>
         </div>
+
+        {!user.verified && <VerifyNotice />}
 
         <h2 className="serif" style={{ fontSize: 30, margin: 0 }}>Your orders</h2>
 
