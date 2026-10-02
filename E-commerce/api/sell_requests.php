@@ -4,6 +4,7 @@
 
 require __DIR__ . '/bootstrap.php';
 allow_methods('POST');
+check_ip_limit('sell', 5);
 
 $input = body();
 
@@ -30,5 +31,7 @@ db()->prepare(
     'INSERT INTO sell_requests (user_id, name, email, phone, city, book_count, books, notes)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
 )->execute([current_user_id(), $name, $email, $phone, $city, $book_count, $books, $notes ?: null]);
+$id = (int) db()->lastInsertId();
+record_attempt('sell');
 
-send_json(['id' => (int) db()->lastInsertId()], 201);
+send_json(['id' => $id], 201);

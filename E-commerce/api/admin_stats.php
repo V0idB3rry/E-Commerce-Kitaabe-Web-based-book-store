@@ -3,7 +3,6 @@
 
 require __DIR__ . '/bootstrap.php';
 allow_methods('GET');
-require_admin();
 
 // A "real" order is cash on delivery or a completed online payment (abandoned Razorpay attempts don't count)
 const REAL_ORDER = "(payment_method = 'cod' OR payment_status = 'paid')";

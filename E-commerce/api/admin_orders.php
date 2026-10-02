@@ -7,7 +7,6 @@
 
 require __DIR__ . '/bootstrap.php';
 allow_methods('GET', 'PATCH');
-require_admin();
 
 const STATUSES = ['processing', 'shipped', 'delivered', 'cancelled'];
 
