@@ -64,12 +64,15 @@ $email    = strtolower(trim((string) ($input['email'] ?? '')));
 $password = (string) ($input['password'] ?? '');
 
 if ($action === 'login') {
+    check_login_attempts('customer', $email);
     $row = $email !== '' ? find_user('email', $email) : null;
 
     // Old accounts stored plain-text passwords; password_verify() rejects those, so they must sign up again.
     if (!$row || !password_verify($password, $row['password'])) {
+        record_login_failure('customer', $email);
         fail('That email and password don’t match. Check them and try again.', 401);
     }
+    clear_login_failures('customer', $email);
     sign_in($row, !empty($input['remember']));
 }
 

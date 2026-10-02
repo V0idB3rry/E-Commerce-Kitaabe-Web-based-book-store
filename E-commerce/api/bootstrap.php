@@ -135,3 +135,55 @@ function fulfil_order(PDO $pdo, int $order_id, int $user_id): void
 
     $pdo->prepare('DELETE FROM user_cart WHERE user_id = ?')->execute([$user_id]);
 }
+
+/** Mark a Razorpay order paid and fulfil it. Call inside a transaction, with the order row locked. */
+function mark_paid(PDO $pdo, int $order_id, int $user_id, string $payment_id): void
+{
+    $pdo->prepare("UPDATE orders SET payment_status = 'paid', razorpay_payment_id = ? WHERE order_id = ?")
+        ->execute([$payment_id, $order_id]);
+    fulfil_order($pdo, $order_id, $user_id);
+}
+
+/** Stop password guessing: 429 after 5 failures for one email, or 20 from one IP, in 15 minutes. */
+function check_login_attempts(string $scope, string $email): void
+{
+    $stmt = db()->prepare(
+        'SELECT COALESCE(SUM(email = ?), 0) AS by_email, COALESCE(SUM(ip = ?), 0) AS by_ip
+         FROM login_attempts
+         WHERE scope = ? AND created_at > NOW() - INTERVAL 15 MINUTE AND (email = ? OR ip = ?)'
+    );
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+    $stmt->execute([$email, $ip, $scope, $email, $ip]);
+    $counts = $stmt->fetch();
+
+    if ($counts['by_email'] >= 5 || $counts['by_ip'] >= 20) {
+        header('Retry-After: 900');
+        fail('Too many sign-in attempts. Please wait 15 minutes and try again.', 429);
+    }
+}
+
+function record_login_failure(string $scope, string $email): void
+{
+    $pdo = db();
+    $pdo->prepare('INSERT INTO login_attempts (scope, email, ip) VALUES (?, ?, ?)')
+        ->execute([$scope, $email, $_SERVER['REMOTE_ADDR'] ?? '']);
+    $pdo->exec('DELETE FROM login_attempts WHERE created_at < NOW() - INTERVAL 1 DAY');
+}
+
+function clear_login_failures(string $scope, string $email): void
+{
+    db()->prepare('DELETE FROM login_attempts WHERE scope = ? AND email = ?')->execute([$scope, $email]);
+}
+
+// Central access guard: runs for every endpoint. Endpoints not listed here are admin-only,
+// so a new file is locked down until it's added to the right list.
+const PUBLIC_ENDPOINTS = ['auth', 'admin_auth', 'books', 'categories', 'sell_requests', 'razorpay_webhook'];
+const USER_ENDPOINTS   = ['cart', 'orders', 'verify_payment'];
+
+$endpoint = basename($_SERVER['SCRIPT_FILENAME'], '.php');
+if (in_array($endpoint, USER_ENDPOINTS, true)) {
+    require_user();
+} elseif (!in_array($endpoint, PUBLIC_ENDPOINTS, true)) {
+    require_admin();
+}
+unset($endpoint);

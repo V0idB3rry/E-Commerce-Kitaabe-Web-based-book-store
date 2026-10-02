@@ -4,15 +4,16 @@
 $secrets_file = __DIR__ . '/secrets.php';
 $secrets = file_exists($secrets_file) ? require $secrets_file : [];
 
-// MySQL (XAMPP defaults)
-const DB_HOST = 'localhost';
-const DB_NAME = 'e-commerce';
-const DB_USER = 'root';
-const DB_PASS = '';
+// MySQL login comes from secrets.php; without it, XAMPP's defaults (root, no password) are used
+define('DB_HOST', $secrets['db_host'] ?? 'localhost');
+define('DB_NAME', $secrets['db_name'] ?? 'e-commerce');
+define('DB_USER', $secrets['db_user'] ?? 'root');
+define('DB_PASS', $secrets['db_pass'] ?? '');
 
 // Razorpay keys live in secrets.php (git-ignored). Copy secrets.example.php to create it.
-define('RAZORPAY_KEY_ID',     $secrets['razorpay_key_id']     ?? '');
-define('RAZORPAY_KEY_SECRET', $secrets['razorpay_key_secret'] ?? '');
+define('RAZORPAY_KEY_ID',         $secrets['razorpay_key_id']         ?? '');
+define('RAZORPAY_KEY_SECRET',     $secrets['razorpay_key_secret']     ?? '');
+define('RAZORPAY_WEBHOOK_SECRET', $secrets['razorpay_webhook_secret'] ?? '');
 
 const STORE_NAME          = 'Second Shelf';
 const CURRENCY            = 'INR';

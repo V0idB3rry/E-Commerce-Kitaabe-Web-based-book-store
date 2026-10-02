@@ -9,7 +9,6 @@
 
 require __DIR__ . '/bootstrap.php';
 allow_methods('GET', 'POST', 'PATCH', 'DELETE');
-require_admin();
 
 const COLUMNS = 'SNO, product_image, product_name, writer_name, description, product_price, mrp,
                  category, book_condition, product_quantity';
