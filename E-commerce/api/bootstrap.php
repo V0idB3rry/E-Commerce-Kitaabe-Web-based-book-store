@@ -164,7 +164,20 @@ function check_login_attempts(string $scope, string $email): void
     }
 }
 
-function record_login_failure(string $scope, string $email): void
+/** 429 once this IP has $max entries for $scope ("register", "sell") in the last hour. Pair with record_attempt(). */
+function check_ip_limit(string $scope, int $max): void
+{
+    $stmt = db()->prepare('SELECT COUNT(*) FROM login_attempts WHERE scope = ? AND ip = ? AND created_at > NOW() - INTERVAL 1 HOUR');
+    $stmt->execute([$scope, $_SERVER['REMOTE_ADDR'] ?? '']);
+
+    if ($stmt->fetchColumn() >= $max) {
+        header('Retry-After: 3600');
+        fail('Too many requests from your network. Please try again in an hour.', 429);
+    }
+}
+
+/** Log a failed sign-in (with its email) or a submitted form (no email) for the limits above. */
+function record_attempt(string $scope, string $email = ''): void
 {
     $pdo = db();
     $pdo->prepare('INSERT INTO login_attempts (scope, email, ip) VALUES (?, ?, ?)')

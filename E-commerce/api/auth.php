@@ -125,7 +125,7 @@ if ($action === 'login') {
 
     // Old accounts stored plain-text passwords; password_verify() rejects those, so they must sign up again.
     if (!$row || !password_verify($password, $row['password'])) {
-        record_login_failure('customer', $email);
+        record_attempt('customer', $email);
         fail('That email and password don’t match. Check them and try again.', 401);
     }
     clear_login_failures('customer', $email);
@@ -133,6 +133,7 @@ if ($action === 'login') {
 }
 
 if ($action === 'register') {
+    check_ip_limit('register', 5);
     $name  = trim((string) ($input['name'] ?? ''));
     $phone = preg_replace('/\D/', '', (string) ($input['phone'] ?? ''));
 
@@ -156,6 +157,7 @@ if ($action === 'register') {
     $stmt->execute([$name, $phone ?: null, $email, password_hash($password, PASSWORD_DEFAULT)]);
 
     $row = find_user('id', (int) db()->lastInsertId());
+    record_attempt('register');
     send_verification($row);
     sign_in($row, false);
 }

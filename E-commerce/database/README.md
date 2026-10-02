@@ -11,6 +11,7 @@ C:\xampp\mysql\bin\mysql.exe -u root < database\schema.sql
 C:\xampp\mysql\bin\mysql.exe -u root < database\migrations\001_storefront_v2.sql
 C:\xampp\mysql\bin\mysql.exe -u root < database\migrations\002_login_attempts.sql
 C:\xampp\mysql\bin\mysql.exe -u root < database\migrations\003_email_links.sql
+C:\xampp\mysql\bin\mysql.exe -u root < database\migrations\004_rate_limit_forms.sql
 C:\xampp\php\php.exe database\create_admin.php
 ```
 
@@ -41,7 +42,7 @@ Keep running migrations as `root`: `shelf_app` can't create or alter tables.
 | `user_cart` | One row per customer + book (`user_id`, `product_id`, `quantity`) |
 | `orders`, `order_items` | Placed orders with Razorpay / COD payment status |
 | `sell_requests` | "Sell your books" submissions |
-| `login_attempts` | Failed sign-ins (last 24 h), used to block password guessing |
+| `login_attempts` | Last 24 h of failed sign-ins, sign-ups and sell requests, used for rate limits |
 | `email_tokens` | Email verification and password reset links (hashed). `user_database.email_verified_at` is set once confirmed |
 
 Cart rows without a `user_id` came from the old storefront (now removed); the API ignores them.

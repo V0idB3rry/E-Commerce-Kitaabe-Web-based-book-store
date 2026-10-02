@@ -42,7 +42,7 @@ if ($action === 'login') {
     $row = $stmt->fetch();
 
     if (!$row || !password_verify($password, $row['password_hash'])) {
-        record_login_failure('admin', $email);
+        record_attempt('admin', $email);
         fail('That email and password don’t match an admin account.', 401);
     }
 
