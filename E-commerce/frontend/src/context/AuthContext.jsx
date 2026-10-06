@@ -7,12 +7,15 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  // Re-reads the signed-in customer, e.g. after a password reset or email verification
+  const refresh = useCallback(
+    () => api('auth.php').then((data) => setUser(data.user), () => setUser(null)),
+    []
+  )
+
   useEffect(() => {
-    api('auth.php')
-      .then((data) => setUser(data.user))
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false))
-  }, [])
+    refresh().finally(() => setLoading(false))
+  }, [refresh])
 
   const login = useCallback(async (email, password, remember) => {
     const data = await api('auth.php', { method: 'POST', body: { action: 'login', email, password, remember } })
@@ -31,7 +34,10 @@ export function AuthProvider({ children }) {
     setUser(null)
   }, [])
 
-  const value = useMemo(() => ({ user, loading, login, register, logout }), [user, loading, login, register, logout])
+  const value = useMemo(
+    () => ({ user, loading, login, register, logout, refresh }),
+    [user, loading, login, register, logout, refresh]
+  )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

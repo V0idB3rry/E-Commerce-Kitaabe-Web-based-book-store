@@ -46,9 +46,7 @@ if (!hash_equals($expected, $rz_signature)) {
     fail('We couldn’t confirm this payment. If money was taken, contact us with your order number.', 400);
 }
 
-$pdo->prepare("UPDATE orders SET payment_status = 'paid', razorpay_payment_id = ? WHERE order_id = ?")
-    ->execute([$rz_payment_id, $order_id]);
-fulfil_order($pdo, $order_id, $user_id);
+mark_paid($pdo, $order_id, $user_id, $rz_payment_id);
 $pdo->commit();
 
 send_json(['order_id' => $order_id]);

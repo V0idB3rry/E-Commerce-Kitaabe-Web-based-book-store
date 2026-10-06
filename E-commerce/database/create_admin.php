@@ -28,7 +28,8 @@ if (strlen($password) < 8) {
 }
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-$conn = new mysqli('localhost', 'root', '', 'e-commerce');
+require __DIR__ . '/../api/config.php';
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 $conn->set_charset('utf8mb4');
 
 $hash = password_hash($password, PASSWORD_DEFAULT);

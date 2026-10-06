@@ -75,6 +75,12 @@ if (method() === 'GET') {
 }
 
 // ── Place an order ───────────────────────────────────────────
+$stmt = db()->prepare('SELECT email_verified_at FROM user_database WHERE id = ?');
+$stmt->execute([$user_id]);
+if (!$stmt->fetchColumn()) {
+    fail('Please confirm your email address before placing an order. You can get a new link from your account page.', 403);
+}
+
 $input = body();
 
 $name    = trim((string) ($input['name'] ?? ''));

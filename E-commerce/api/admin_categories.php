@@ -6,7 +6,6 @@
 
 require __DIR__ . '/bootstrap.php';
 allow_methods('GET', 'POST', 'PATCH', 'DELETE');
-require_admin();
 
 function all_categories(): array
 {
